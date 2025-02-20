@@ -1,0 +1,23 @@
+--№1
+insert into manufacturer (name, country_id) values ('HP', 4)
+
+--№2
+UPDATE user  
+SET age  = (18/3)
+WHERE name = 'Андрей'
+
+--№3
+select top(1) name, price
+from product
+order by desc
+
+--№4
+select u.name, p.name
+from phone p join user u on p.user_id = u.id
+where p.name like '+3_4%' or u.age > 35
+
+--№5
+select top(5)u.name, p.count  
+from user u join order o on u.id = o.user_id
+where order o join product p on o.product_id = p.id
+order by desc
