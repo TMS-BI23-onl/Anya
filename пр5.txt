@@ -1,0 +1,23 @@
+--1. Ќайти ProductSubcategoryID из Production.Product, где мин вес такого ProductSubcategoryID больше 150. 
+select ProductSubcategoryID, min(weight) 
+from Production.Product
+group by ProductSubcategoryID 
+having min(weight) > 150;
+
+--2. Ќайти самый дорогой продукт (поле StandardCost) из Production.Product. (4 способа)
+select top (1) StandardCost, Name
+from Production.Product
+order by StandardCost desc
+
+--3. Ќайти клиентов, которые за последний год не совершили ни одного заказа (схема Shop)
+select FirstName, LastName
+from  dim_customer c  join  fact_orders o on c.CustomerID = o.CustomerID
+except
+select FirstName, LastName
+from  dim_customer c  join  fact_orders o on c.CustomerID = o.CustomerID
+where datediff(day, o.date, getdata()) <= 365
+
+--4. Ќайти дл€ каждого продукта кол-во заказов за последние 5 лет.  (схема Shop)
+select d.ProductName , cout(orderid)
+from dim_product d join fact_orders f on d.ProuductID=f.ProuductID
+where datediff(year, f.date, getdata()) = 5
