@@ -1,0 +1,46 @@
+--¹2
+--1)
+select color, avg(StandardCost)
+from Production.Product 
+group by color
+having COUNT(ProductID)>=40
+
+--2)
+
+select city, count(AddressID) 
+from Person.Address 
+group by city
+
+--3)
+
+select top 5 ProductID, quantity
+from Production.ProductInventory 
+order by quantity desc
+
+--4)
+
+select Comments
+from Production.ProductReview
+where rating > (select avg(rating)
+				from Production.ProductReview)
+
+--5)
+
+select ShipRate
+from Purchasing.ShipMethod 
+where ShipRate > (select min(ListPrice)
+				from Production.Product
+				where ListPrice != 0)
+
+--6.1)
+
+select BusinessEntityID 
+from Person.Person
+exept
+select BusinessEntityID
+from Sales.PersonCreditCard
+
+--6.2)
+
+select pp.BusinessEntityID 
+from Person.Person pp right join Sales.PersonCreditCard sp on pp.BusinessEntityID  = sp.BusinessEntityID 
