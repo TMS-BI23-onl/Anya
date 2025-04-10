@@ -1,0 +1,59 @@
+--№2
+
+select p.FirstName, p.LastName, f.FirstName, f.LastName
+from People p join Father f on p.id_Father = f.Id
+where p.FirstName like 'Дмитрий'
+
+--№3
+
+create table Teams2(
+team_id	int identity,
+team_name	varchar(20),
+team_code	char(3),
+main_sponsor	nvarchar(30),
+director_name	nvarchar(30)
+)
+
+create table Teams(
+team_id	int identity,
+team_name	varchar(20),
+team_code	char(3),
+main_sponsor	nvarchar(30),
+director_name	nvarchar(30)
+)
+
+insert into Teams (team_name, team_code, main_sponsor, director_name)
+values
+('Ferrari', 'FER', 'HP', 'Fred Vasseur'),
+('Aston Martin', 'AMR', 'Cognizant', 'Lawrence Stroll'),
+('McLaren', 'MCL', 'OKX', 'Andreas Seidl'),
+('Red Bull', 'RBR', 'Oracle', 'Christian Horner')
+
+update Teams
+set main_sponsor = 'Aramco'
+where main_sponsor = 'Cognizant' 
+
+update Teams
+set director_name = 'Andrea Stella'
+where director_name = 'Andreas Seidl'
+
+update Teams
+set team_name = 'Red Bull Racing'
+where team_name ='Red Bull'
+
+update Teams
+set director_name='Dr Marco'
+where director_name='Christian Horner'
+
+insert into Teams (team_name, team_code, main_sponsor, director_name)
+values ('Mercedes AMG', 'AMG', 'Petronas', 'Toto Wolff')
+
+merge Teams2 target
+using Teams source on target.team_name=source.team_name
+when matched and (target.main_sponsor !=source.main_sponsor or target.director_name !=source.director_name)
+then update set target.main_sponsor =source.main_sponsor, target.director_name =source.director_name
+when not matched by target
+then insert (team_name, team_code, main_sponsor, director_name)
+values (source.team_name, source.team_code, source.main_sponsor,source.director_name)
+when not matched BY source
+then delete;
