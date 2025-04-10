@@ -1,0 +1,54 @@
+--№6
+
+create table Patients
+(
+ ID int identity primary key,
+ FirstName nvarchar(100) not null,
+ LastName nvarchar(100) not null,
+ SSN nvarchar(50) not null,
+ Email as concat (upper(left (FirstName, 1)), lower (left(LastName, 3)), '@mail.com'),
+ Temp decimal(3,1),
+ CreatedDate datetime not null default getdate(),
+ )
+
+--№7
+
+insert into Patients (FirstName,LastName,SSN,Temp)
+values ('Alexey','Gorbal','140', 36.9), ('Daria','Buyalskaya','666', 36.7),('Anna','Soroka','114', 38.1)
+
+--№8
+
+alter table Patients
+add TempType as case
+when Temp <37.0 then '< 37°C' else '> 37°C'
+end
+
+--№9
+
+create view Patients_v as select ID, Temp, Temp * 9/5 + 32 as TempF from Patients
+
+--№10
+
+create function temp_udf(@temp decimal(3,1))
+returns decimal(4,1)
+as begin 
+declare @tempF decimal(4,1)
+set @tempF = @temp * 9/5 + 32
+return @tempF
+end
+
+--№11
+
+declare @1 date
+declare @2 date
+declare @3 date
+set @1 = dateadd(day, 1, eomonth (getdate()))
+set @2 = dateadd(day, 2, eomonth (getdate()))
+set @3 = dateadd(day, 3, eomonth (getdate()))
+
+select
+case 
+when cast(datename(weekday, @1) as varchar) not in ('суббота', 'воскресенье') then @1
+when cast(datename(weekday, @2) as varchar) not in  ('суббота', 'воскресенье') then @2
+else @3
+end
