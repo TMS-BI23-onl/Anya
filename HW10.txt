@@ -1,0 +1,10 @@
+--¹2
+
+create table People
+(ID int identity (1, 1),
+FirstName nvarchar(50),
+LastName nvarchar(50))
+
+insert into People (FirstName,LastName)
+select distinct top 1000000 p1.FirstName, p2.LastName
+from Person.Person p1 cross join Person.Person p2
