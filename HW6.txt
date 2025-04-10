@@ -1,0 +1,28 @@
+--№1
+
+-- если все значения будут разными без повторов
+
+--№2
+--a)
+
+select SalesOrderID, LineTotal,  
+avg(LineTotal) over (partition by SalesOrderID) as "Avg",
+min(LineTotal) over (partition by SalesOrderID) as "Min",
+max(LineTotal) over (partition by SalesOrderID) as "Max"  
+from Sales.SalesOrderDetail   
+where SalesOrderID IN (43659,43664)
+
+--b)
+
+SELECT concat(p.FirstName,' ', p.LastName) as FullName,
+       concat(upper(left(p.LastName,3)),'login',t.[Group]) AS l0gin,
+       rank() over (order by s.SalesYTD) as ThisYear,
+	   rank() over (order by s.SalesLastYear) as LastYear
+FROM Sales.SalesPerson s join Sales.SalesTerritory t on s.TerritoryID = t.TerritoryID
+						 join HumanResources.Employee e on s.BusinessEntityID = e.BusinessEntityID
+						 join Person.Person p on p.BusinessEntityID = e.BusinessEntityID
+order by rank() over (order by s.SalesYTD)
+
+--c)
+
+SELECT DATEADD(month, 1, DATEADD(day, 1 - DAY(GETDATE()), GETDATE()))
