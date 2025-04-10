@@ -1,0 +1,53 @@
+--№3
+--a)
+
+select *  
+from Production.UnitMeasure  
+where UnitMeasureCode like 'T%'
+
+--нет
+
+select count (distinct(UnitMeasureCode))
+from AdventureWorks2017.Production.UnitMeasure
+
+insert into AdventureWorks2017.Production.UnitMeasure (UnitMeasureCode, Name, ModifiedDate) 
+values 
+('TT1', 'Test 1', '2020-09-09'),
+('TT2', 'Test 2', getdate());
+
+select UnitMeasureCode
+from AdventureWorks2017.Production.UnitMeasure 
+where UnitMeasureCode like 'T%' 
+
+--b)
+
+select *
+into Production.UnitMeasureTest
+from AdventureWorks2017.Production.UnitMeasure 
+where UnitMeasureCode like 'T%'
+
+insert into Production.UnitMeasureTest (UnitMeasureCode, Name, ModifiedDate)
+select *
+from AdventureWorks2017.Production.UnitMeasure 
+where UnitMeasureCode = 'CAN'
+
+select * 
+from Production.UnitMeasureTest
+order by 1
+
+--c)
+
+update Production.UnitMeasureTest
+set UnitMeasureCode = 'TTT'
+
+--d)
+
+delete
+from Production.UnitMeasureTest
+
+--№4
+
+count(1) - 4
+count(name) -2
+count(id)  - 4 
+count(*)  - 4
