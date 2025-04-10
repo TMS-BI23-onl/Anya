@@ -1,0 +1,8 @@
+--¹3
+create procedure Updating @National int, @Business int as
+begin update HumanResources.Employee
+set NationalIDNumber = @National
+where BusinessEntityID = @Business
+end
+
+exec dbo.Updating @National = 879341111, @Business = 15
