@@ -1,0 +1,120 @@
+--№3пр
+--1)
+
+select Name, Color, StandardCost
+from (select Name, Color, StandardCost, rank() over (partition by  Color order by StandardCost desc) as Rank
+	  from Production.Product) as maxcost
+where maxcost.Rank=1 and Color is not null
+
+--2)
+
+select Name, Color, StandardCost
+from (select Color, Name, StandardCost, max(StandardCost) over(partition by Color) as maxcost  
+	  from Production.Product ) m
+where StandardCost = maxcost and Color is not null
+
+--3)
+
+select Name, Color, StandardCost
+from (select Name, Color, StandardCost, case when StandardCost = max(StandardCost) over (partition by Color) then 'yes' else 'no' end as maxcost
+	  from Production.Product) m
+where maxcost='yes' and Color is not null
+
+--№4пр
+
+--поликлиника
+--docter: docterid, firstname, surname, lastname, telephone, pasportnamber, category, department, cabinetid, worktime
+--patient: patientid, age, firstname, surname, lastname, telephone, pasportnamber
+--visits: visitsid, docterid, patientid, cabinetid, visitdata, certificateid
+--certificate: certificateid, diagnosis, appointmentsid, datastart, dataend
+--department: departmentid, docterid, departmentname, headdocter
+--appoiments: appointmentsid, medicaments, recomendation, directions
+--cabinet: cabinetid, docterid, departmentid 
+
+--сколько врачей работает в определенное время во всей поликлинике
+--найти самый загруженый кабинет в определенное время
+
+--№3
+
+select Year, [1] as January, [2] as February, [12] as December
+from (select year(startdate) as Year, month(startdate) as Month, OrderQty
+      from Production.WorkOrder
+      where month(startdate) in (1, 2, 12)) as SourceTable
+pivot (sum(orderqty) for Month in ([1], [2], [12])) as PivotTable
+order by Year
+
+--№5
+
+create table data_for_merge(
+Function_name nvarchar (50),
+Function_count int)
+
+merge dbo.FunctionResult as target
+using dbo.data_for_merge1 as source on target.Function_name = source.Alex
+when not matched by target
+then insert (Function_name, Function_count) values (source.Alex, 1)
+when matched then update set target.Function_count = target.Function_count + 1;
+
+merge dbo.FunctionResult as target
+using (select Carlos
+       from dbo.data_for_merge1
+       where Carlos is not null) as source on target.Function_name = source.Carlos
+when not matched by target
+then insert (Function_name, Function_count) values (source.Carlos, 1)
+when matched then update set target.Function_count = target.Function_count + 1;
+
+merge dbo.FunctionResult as target
+using (select Charles
+	   from dbo.data_for_merge1
+       where Charles is not null ) as source on target.Function_name = source. Charles
+when not matched by target
+then insert (Function_name, Function_count) values (source. Charles, 1)
+when matched then update set target.Function_count = target.Function_count + 1;
+
+merge dbo.FunctionResult as target
+using (select Daniel
+       from dbo.data_for_merge1
+       where Daniel is not null) as source on target.Function_name = source. Daniel
+when not matched by target
+then insert (Function_name, Function_count) values (source. Daniel, 1)
+when matched then update set target.Function_count = target.Function_count + 1;
+
+merge dbo.FunctionResult as target
+using (select Esteban
+       from dbo.data_for_merge1
+       where Esteban is not null) as source on target.Function_name = source. Esteban
+when not matched by target
+then insert (Function_name, Function_count) values (source. Esteban, 1)
+when matched then update set target.Function_count = target.Function_count + 1;
+
+merge dbo.FunctionResult as target
+using (select Fred
+       from dbo.data_for_merge1
+       where Fred is not null) as source on target.Function_name = source. Fred
+when not matched by target
+then insert (Function_name, Function_count) values (source. Fred, 1)
+when matched then update set target.Function_count = target.Function_count + 1;
+
+merge dbo.FunctionResult as target
+using (select George
+       from dbo.data_for_merge1
+       where George is not null) as source on target.Function_name = source. George
+when not matched by target
+then insert (Function_name, Function_count) values (source. George, 1)
+when matched then update set target.Function_count = target.Function_count + 1;
+
+merge dbo.FunctionResult as target
+using (select Lando
+       from dbo.data_for_merge1
+       where Lando is not null) as source on target.Function_name = source. Lando
+when not matched by target
+then insert (Function_name, Function_count) values (source. Lando, 1)
+when matched then update set target.Function_count = target.Function_count + 1;
+
+merge dbo.FunctionResult as target
+using (select Lewis
+       from dbo.data_for_merge1
+       where Lewis is not null) as source on target.Function_name = source. Lewis
+when not matched by target
+then insert (Function_name, Function_count) values (source. Lewis, 1)
+when matched then update set target.Function_count = target.Function_count + 1;
