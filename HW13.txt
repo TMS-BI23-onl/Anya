@@ -1,0 +1,38 @@
+--№3пр
+--1)
+
+select extract(year from v.дата_выдачи) as год,
+       sum(case when k.жанр = 'Fiction' then 1 else 0 end) as Fiction,
+       sum(case when k.жанр = 'Memoir' then 1 else 0 end) as Memoir,
+       sum(case when k.жанр = 'Educational' then 1 else 0 end) as Educational
+from выдачи_книг v join книги k on v.идентификатор_книги = k.идентификатор_книги
+where v.дата_выдачи >= current_date - interval '5 years' and k.жанр in ('Fiction', 'Memoir', 'Educational')
+group by extract(year from v.дата_выдачи)
+order by год;
+
+-----
+
+select *
+from (select TO_CHAR (v.дата_выдачи, 'YYYY') as год, k.жанр
+      from выдачи_книг v join книги k on v.идентификатор_книги = k.идентификатор_книги
+      where v.дата_выдачи >= ADD_MONTHS(TRUNC(SYSDATE, 'YYYY'), -60) and k.жанр in ('Fiction', 'Memoir', 'Educational'))
+pivot (count(*) for год in (
+       '2021' as "2021",
+       '2022' as "2022",
+       '2023' as "2023",
+       '2024' as "2024",
+       '2025' as "2025"))
+order by жанр;
+
+--2)
+
+select i.название as издательство, count(*) as количество_иностранных_книг
+from книги k join автор a on k.автор = a.идентификатор_автора 
+			 join издательство i on k.id_издательства = i.идентификатор_издательства
+where a.страна is not null and i.страна is not null and a.страна <> i.страна
+group by i.название
+order by количество_иностранных_книг desc;
+
+--№3
+AdventureWorks2017 нормализованная и AdventureWorksDW2017 денормализованная
+AdventureWorksDW2017 будет работать быстрее с отчетами в ней не ненужен join. 
