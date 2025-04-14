@@ -1,0 +1,34 @@
+--№1
+
+create view dbo.BookStore as
+select top 50 with ties Name, sum(Rating) over (partition by Name) as SumR, 
+row_number() over (partition by Name order by SaleDate) as Rank1
+from (select e.Name, s.SaleDate, case when count(1) between 0 and 4 then 1
+      when count(1) between 5 and 10 then 2
+	  else 3
+	  end as Rating
+	  from dbo.FactSale s join dbo.DimEmployee e on s.EmployeeID=e.EmployeeID
+      group by e.Name, s.SaleDate) as tableRank
+group by Name, SaleDate, Rating
+order by Rank1, SumR desc
+
+--№2
+--a)
+
+заменить фон на однотонный светло серый
+сделать везде шрифт одинаковой толщины, размера
+убрать боковую подпись
+сделать одного цвета график без 3д эффектов
+возможно контур сделать тоньше или светлее
+
+--b)
+
+убрать попись но самом графике
+возможно сделать круговой, плоской, а не объемной 
+
+--с)
+
+сделать текст крупнее 
+повернуть текст под графиком 
+сдвинуть график ближе друг к другу и возможно повернуть боком 
+сократить верхнюю шапку подписи, добавить подписи осей
